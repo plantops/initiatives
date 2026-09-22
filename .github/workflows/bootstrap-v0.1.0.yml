@@ -1,0 +1,38 @@
+name: Bootstrap v0.1.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bootstrap-v0.1.0.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Expand source, commit, and tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/initiative-src
+          tar -xzf .bootstrap/initiative-src.tgz -C /tmp/initiative-src --strip-components=1
+          rsync -a --exclude README.md /tmp/initiative-src/ ./
+          rm -rf .bootstrap
+          rm -f .github/workflows/bootstrap-v0.1.0.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: sync initiative app v0.1.0"
+          git tag -a v0.1.0 -m "v0.1.0 local SQLite MVP"
+          git push origin HEAD:main
+          git push origin v0.1.0
