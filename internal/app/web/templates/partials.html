@@ -1,0 +1,8 @@
+{{define "head"}}
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{.Title}}</title><link rel="stylesheet" href="/static/app.css"></head><body>
+{{end}}
+{{define "nav"}}
+<header class="top"><a class="brand" href="/">Initiatives</a>{{if .User}}<nav><a href="/">Danh sách</a><a href="/initiatives/new">Sáng kiến mới</a>{{if hasRole .User "ADMIN"}}<a href="/admin/master">Master/RBAC</a>{{end}}</nav><div class="who">{{.User.FullName}} · {{.User.DepartmentCode}}<form method="post" action="/logout" class="inline"><input type="hidden" name="_csrf" value="{{.User.CSRFToken}}"><button class="linkbtn">Đăng xuất</button></form></div>{{end}}</header>
+{{end}}
+{{define "foot"}}<footer>Local MVP · SST = database, reports are outputs.</footer></body></html>{{end}}
+{{define "error"}}{{if .Error}}<div class="alert error">{{.Error}}</div>{{end}}{{if .Message}}<div class="alert ok">{{.Message}}</div>{{end}}{{end}}
